@@ -1,0 +1,190 @@
+#include "stdafx.h"
+#include <vector>
+#include <ctime>
+#include <cstdio>
+#include <iostream>
+#include <cstdlib>
+#include <algorithm>
+#include <string>
+#include <windows.h>
+
+using namespace std;
+
+size_t N;
+vector<size_t> vst;
+string mark;
+
+//选择投注充值卡的金额
+void choosePrice()
+{
+	puts("请选择您需要购买的充值加卡金额：");
+	puts("10 20 30 50 100 300 500 1000 5000 元");
+	cin >> N;
+	while (N != 10 && N != 20 && N != 30 && N != 50 && N != 100 && N != 100 && N != 300 && N != 500 && N != 1000 && N != 5000)
+	{
+		puts("对不起，您选的金额有误，请重新输入：");
+		puts("充值卡金额包括 10 20 30 50 100 300 500 1000 5000 元");
+		cin >> N;
+		cout << endl;
+	}
+	puts("请您选择投注金额：");
+}
+//选择投注的大小
+void chooseSize()
+{
+	size_t cnt;
+	size_t count = 0;
+	cin >> cnt;
+	size_t M = static_cast<size_t>(N *1.2);
+	while (cnt > M)
+	{
+		cout << "对不起，您输入的金额有误！请输入1--" << M << "元！"<< endl;
+		cin >> cnt;
+	}
+	srand((unsigned)time(NULL));
+	while (count != cnt)
+	{
+		size_t suiji = rand() % M;
+		if (find(vst.begin(), vst.end(), suiji) == vst.end())
+		{
+			vst.push_back(suiji);
+			count++;
+		}
+	}
+	
+}
+//展示投注号码内容
+void display()
+{
+	cout << "您购买的号码如下所示：" << endl;
+	sort(vst.begin(), vst.end(), [](size_t s1, size_t s2) { return s1 < s2; });
+	//auto sz = vst.end() - vst.begin();
+	size_t sz = 0;
+	//int hangshu = sz / 10 + 1;
+	auto beg = vst.begin();
+	for (; beg != vst.end(); beg++,sz++)
+		{
+			//保证每行固定输出为10个
+			if (sz % 10 == 9)
+			{
+				//格式化输出结果
+				if (*beg >= 0 && *beg < 10)
+				{
+					cout << "00000" << *beg << "  ";
+				}
+				else if (*beg >= 10 && *beg < 100)
+				{
+					cout << "0000" << *beg << "  ";
+				}
+				else if (*beg >= 100 && *beg < 1000)
+				{
+					cout << "000" << *beg << "  ";
+				}
+				else if (*beg >= 1000)
+				{
+					cout << "00" << *beg << "  ";
+				}
+				cout << endl;
+			}
+			else
+			{
+				if (*beg >= 0 && *beg < 10)
+				{
+					cout << "00000" << *beg << "  ";
+				}
+				else if (*beg >= 10 && *beg < 100)
+				{
+					cout << "0000" << *beg << "  ";
+				}
+				else if (*beg >= 100 && *beg < 1000)
+				{
+					cout << "000" << *beg << "  ";
+				}
+				else if (*beg >= 1000)
+				{
+					cout << "00" << *beg << "  ";
+				}
+				
+			}
+			
+		}	
+}
+
+//公布幸运号码
+void gongbu()
+{
+	cout << endl;
+	cout << endl;
+	size_t M = static_cast<size_t>(N *1.2);
+	size_t luckynum = rand() % (M);
+	//格式化输出结果
+	if (luckynum >= 0 && luckynum < 10)
+	{
+		cout << "中奖号码是：" << "00000" << luckynum << endl;
+	}
+	else if (luckynum >= 10 && luckynum < 100)
+	{
+			cout << "中奖号码是：" << "0000" << luckynum << endl;
+	}
+	else if (luckynum >= 100 && luckynum < 1000)
+	{
+		cout << "中奖号码是：" << "000" << luckynum << endl;
+	}
+	else if (luckynum >= 1000)
+	{
+		cout << "中奖号码是：" << "00" << luckynum << endl;
+	}
+
+	if (find(vst.begin(), vst.end(), luckynum) != vst.end())
+	{
+		cout << "恭喜您中了" << N << "元话费充值卡！" << endl;
+	}
+	else
+	{
+		cout << "不好意思您暂时没有中奖！" << endl;
+	}
+}
+//抽奖过程
+void choujiang()
+{
+	while (mark == "是" && mark != "结束！")
+	{
+		cout << endl;
+		cout << endl;
+
+		choosePrice();
+		chooseSize();
+		display();
+		//延时两秒公布幸运号码
+		Sleep(2000);
+		gongbu();
+
+		cout << endl;
+		cout << endl;
+		vst.clear();
+		cout << "您是否要继续网易话费卡抽奖？选择“是”继续，“结束”结束抽奖！" << endl;
+		cin >> mark;
+		if (mark == "是")
+		{
+			choujiang();
+		}
+		if(mark == "结束")
+		{
+			break;
+		}
+		
+	}
+}
+
+void startCJ()
+{
+	cout << "您是否要参加网易话费卡抽奖？选择“是”开始！" << endl;
+	cin >> mark;
+	choujiang();
+}
+
+void main()
+{
+	startCJ();
+}
+
