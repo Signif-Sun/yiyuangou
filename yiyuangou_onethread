@@ -34,12 +34,27 @@ void chooseSize()
 {
 	size_t cnt;
 	size_t count = 0;
+	string queren;
 	cin >> cnt;
 	size_t M = static_cast<size_t>(N *1.2);
 	while (cnt > M)
 	{
-		cout << "对不起，您输入的金额有误！请输入1--" << M << "元！"<< endl;
+		cout << "对不起，您输入的金额有误！请输入1--" << M << "元！" << endl;
 		cin >> cnt;
+	}
+	cout << "您的投注金额为" << cnt << "确认请输入“是”：" << endl;
+	cin >> queren;
+	while (queren != "是")
+	{
+		puts("请您重新选择投注金额：");
+		cin >> cnt;
+		while (cnt > M)
+		{
+			cout << "对不起，您输入的金额有误！请输入1--" << M << "元！" << endl;
+			cin >> cnt;
+		}
+		cout << "您的投注金额为" << cnt << "确认请输入“是”：" << endl;
+		cin >> queren;
 	}
 	srand((unsigned)time(NULL));
 	while (count != cnt)
@@ -51,7 +66,7 @@ void chooseSize()
 			count++;
 		}
 	}
-	
+
 }
 //展示投注号码内容
 void display()
@@ -62,52 +77,53 @@ void display()
 	size_t sz = 0;
 	//int hangshu = sz / 10 + 1;
 	auto beg = vst.begin();
-	for (; beg != vst.end(); beg++,sz++)
+	cout << endl;
+	for (; beg != vst.end(); beg++, sz++)
+	{
+		//保证每行固定输出为10个
+		if (sz % 10 == 9)
 		{
-			//保证每行固定输出为10个
-			if (sz % 10 == 9)
+			//格式化输出结果
+			if (*beg >= 0 && *beg < 10)
 			{
-				//格式化输出结果
-				if (*beg >= 0 && *beg < 10)
-				{
-					cout << "00000" << *beg << "  ";
-				}
-				else if (*beg >= 10 && *beg < 100)
-				{
-					cout << "0000" << *beg << "  ";
-				}
-				else if (*beg >= 100 && *beg < 1000)
-				{
-					cout << "000" << *beg << "  ";
-				}
-				else if (*beg >= 1000)
-				{
-					cout << "00" << *beg << "  ";
-				}
-				cout << endl;
+				cout << "00000" << *beg << "  ";
 			}
-			else
+			else if (*beg >= 10 && *beg < 100)
 			{
-				if (*beg >= 0 && *beg < 10)
-				{
-					cout << "00000" << *beg << "  ";
-				}
-				else if (*beg >= 10 && *beg < 100)
-				{
-					cout << "0000" << *beg << "  ";
-				}
-				else if (*beg >= 100 && *beg < 1000)
-				{
-					cout << "000" << *beg << "  ";
-				}
-				else if (*beg >= 1000)
-				{
-					cout << "00" << *beg << "  ";
-				}
-				
+				cout << "0000" << *beg << "  ";
 			}
-			
-		}	
+			else if (*beg >= 100 && *beg < 1000)
+			{
+				cout << "000" << *beg << "  ";
+			}
+			else if (*beg >= 1000)
+			{
+				cout << "00" << *beg << "  ";
+			}
+			cout << endl;
+		}
+		else
+		{
+			if (*beg >= 0 && *beg < 10)
+			{
+				cout << "00000" << *beg << "  ";
+			}
+			else if (*beg >= 10 && *beg < 100)
+			{
+				cout << "0000" << *beg << "  ";
+			}
+			else if (*beg >= 100 && *beg < 1000)
+			{
+				cout << "000" << *beg << "  ";
+			}
+			else if (*beg >= 1000)
+			{
+				cout << "00" << *beg << "  ";
+			}
+
+		}
+
+	}
 }
 
 //公布幸运号码
@@ -118,13 +134,14 @@ void gongbu()
 	size_t M = static_cast<size_t>(N *1.2);
 	size_t luckynum = rand() % (M);
 	//格式化输出结果
+	//Sleep(1000);
 	if (luckynum >= 0 && luckynum < 10)
 	{
 		cout << "中奖号码是：" << "00000" << luckynum << endl;
 	}
 	else if (luckynum >= 10 && luckynum < 100)
 	{
-			cout << "中奖号码是：" << "0000" << luckynum << endl;
+		cout << "中奖号码是：" << "0000" << luckynum << endl;
 	}
 	else if (luckynum >= 100 && luckynum < 1000)
 	{
@@ -156,7 +173,17 @@ void choujiang()
 		chooseSize();
 		display();
 		//延时两秒公布幸运号码
-		Sleep(2000);
+		Sleep(1000);
+		cout << endl;
+		cout << endl;
+		cout << "距离开奖时间还有3s！" << endl;
+		Sleep(1000);
+		cout << "3s" << endl;
+		Sleep(1000);
+		cout << "2s" << endl;
+		Sleep(1000);
+		cout << "1s" << endl;
+		Sleep(1000);
 		gongbu();
 
 		cout << endl;
@@ -168,11 +195,11 @@ void choujiang()
 		{
 			choujiang();
 		}
-		if(mark == "结束")
+		if (mark == "结束")
 		{
 			break;
 		}
-		
+
 	}
 }
 
@@ -182,9 +209,3 @@ void startCJ()
 	cin >> mark;
 	choujiang();
 }
-
-void main()
-{
-	startCJ();
-}
-
